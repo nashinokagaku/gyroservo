@@ -58,26 +58,21 @@ void interpolation(float d_pos1, float d_pos2, int d_time, int d_num){
   tpos[1] -= pos[1];
   tpos[0] /= d_num;
   tpos[1] /= d_num;
-  for(i = 0; i < d_num; i++)
-  {
+  for(i = 0; i < d_num; i++){
   	pos[0] = pos[0] + tpos[0];
   	pos[1] = pos[1] + tpos[1];
-  	if (pos[0] >= 120)
-	{
-		pos[0] = 120;
-	}
-	else if (pos[0] <= 0)
-	{
-		pos[0] = 0;
-	}
-  	if (pos[1] >= 120)
-	{
-		pos[1] = 120;
-	}
-	else if (pos[1] <= 0)
-	{
-		pos[1] = 0;
-	}
+  	if (pos[0] >= 120){
+		  pos[0] = 120;
+	  }
+    else if (pos[0] <= 0){
+      pos[0] = 0;
+    }
+    if (pos[1] >= 120){
+      pos[1] = 120;
+    }
+    else if (pos[1] <= 0){
+      pos[1] = 0;
+    }
   	servo1.write(pos[0]);
   	servo2.write(pos[1]);
     // Serial.println(pos[0]);
@@ -86,7 +81,7 @@ void interpolation(float d_pos1, float d_pos2, int d_time, int d_num){
 }
 
 void loop(){
-  if ( Serial.available() ) {
+  if ( Serial.available() ){
     key = Serial.readString();
 //    Serial.write( key );
   }
@@ -121,8 +116,7 @@ void loop(){
 //  Serial.print(","); Serial.print(GyroY_f, 5);
 //  Serial.print(","); Serial.print(GyroZ_f, 5); 
 //  Serial.println("");
-  if (key == "O")
-  {
+  if (key == "O"){
     Serial.print(","); Serial.print( "ON" ); Serial.println("");
     interpolation(120 * AccZ_f / g, 120 * AccY_f / g, 5, 5);
   }
