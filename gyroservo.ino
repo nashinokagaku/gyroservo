@@ -118,7 +118,7 @@ void loop(){
 //  Serial.println("");
   if (key == "O"){
     Serial.print(","); Serial.print( "ON" ); Serial.println("");
-    interpolation(120 * AccZ_f / g, 120 * AccY_f / g, 5, 5);
+    interpolation(90 * AccZ_f / g, 90 * AccY_f / g, 5, 5);
   }
   else{
     Serial.print(","); Serial.print( "OFF" ); Serial.println("");
