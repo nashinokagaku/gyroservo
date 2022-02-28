@@ -137,8 +137,8 @@ void interpolation(float d_pos1, float d_pos2, int d_time, int d_num){
     float tpos[2];
     float hpos[2];
     float dpos[2];
-    hpos[0] = 90;
-    hpos[1] = 90;
+    hpos[0] = 80;
+    hpos[1] = 80;
     dpos[0] = d_pos1;
     dpos[1] = d_pos2;
     tpos[0] = hpos[0] + dpos[0];
@@ -192,5 +192,5 @@ void loop(){
         blinkState = !blinkState;
         digitalWrite(LED_PIN, blinkState);
     }
-    interpolation(ypr[1] * 180/M_PI, ypr[2] * 180/M_PI, 1, 3);
+    interpolation(2 * ypr[2] * 180/M_PI, -2 * ypr[1] * 180/M_PI, 1, 3);
 }
