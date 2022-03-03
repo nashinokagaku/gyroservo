@@ -2,10 +2,15 @@
 #include <Servo.h>
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
+#include "PIDcontroller.h"
+
+using namespace ARCS;
 
 MPU6050 mpu;
 Servo servo1;
 Servo servo2;
+static PIDcontroller r_pid(1.0, 0.1, 0.01, 100.0, 0.05);
+static PIDcontroller p_pid(1.0, 0.1, 0.01, 100.0, 0.05);
 
 // #define OUTPUT_READABLE_YAWPITCHROLL
 #define OUTPUT_TEAPOT
@@ -154,16 +159,16 @@ void interpolation(float d_pos1, float d_pos2, int d_time, int d_num){
         pos[0] = pos[0] + tpos[0];
         pos[1] = pos[1] + tpos[1];
         if (pos[0] >= 180){
-        	pos[0] = 180;
+            pos[0] = 180;
         }
         else if (pos[0] <= 0){
-        	pos[0] = 0;
+            pos[0] = 0;
         }
         if (pos[1] >= 180){
-        	pos[1] = 180;
+            pos[1] = 180;
         }
         else if (pos[1] <= 0){
-        	pos[1] = 0;
+            pos[1] = 0;
         }
         servo1.write(pos[0]);
         servo2.write(pos[1]);
@@ -209,5 +214,23 @@ void loop(){
         blinkState = !blinkState;
         digitalWrite(LED_PIN, blinkState);
     }
-    interpolation(2 * ypr[2] * 180/M_PI, -2 * ypr[1] * 180/M_PI, 1, 3);
+    float r_cmd = 0;
+    float p_cmd = 0;
+    float u1 = 80 + r_pid.GetSignal(r_cmd + ypr[2] * 180/M_PI);
+    float u2 = 80 + p_pid.GetSignal(p_cmd - ypr[1] * 180/M_PI);
+    Serial.print("\t input\t");
+    Serial.print(u1);
+    Serial.print("\t");
+    Serial.print(u2);
+    if(0 < u1 < 180 & 0 < u2 < 180){
+        u1 = u1;
+        u2 = u2;
+    }
+    else{
+      u1 = 0;
+      u2 = 0;
+    }
+    servo1.write(u1);
+    servo2.write(u2);
+    delay(5);
 }
